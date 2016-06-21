@@ -1,0 +1,314 @@
+import java.awt.*; 
+import java.awt.event.*; 
+import javax.swing.*;
+import java.util.Random;
+  
+/**
+ *
+ * @author RW-Odessa
+ * 14:38 19.09.2014
+ */
+
+class BraineGame implements ActionListener { 
+ 
+	JLabel jlab, jlaba, jlabb; 
+	//JButton JButtonStart;
+ 
+    // These variables are used to time the task. 
+    long beginT, endT; 
+
+    Random r = new Random();
+    int rnd, rnc = 0;
+	boolean rnb = false;
+	
+	AverageTime AT1, AT2;
+
+	//enum GameColor {КРАСНЫЙ, ОРАНЖЕВЫЙ, ЖЕЛТЫЙ, ЗЕЛЕНЫЙ, СИНИЙ, ГОЛУБОЙ}; 	
+	
+  BraineGame() { 
+ 
+    // Create a new JFrame container. 
+    JFrame jfrm = new JFrame("Определение цвета"); 
+ 
+    // Specify FlowLayout for the layout manager. 
+    //jfrm.setLayout(new FlowLayout());
+    //jfrm.setLayout(new BorderLayout());
+
+    GridBagLayout gbag = new GridBagLayout();  
+    GridBagConstraints gbc = new GridBagConstraints();  
+    jfrm.setLayout(gbag);  
+ 
+    // Create a text-based label.
+	
+	jlab = new JLabel("START"); 
+    //jlaba.setHorizontalTextPosition(SwingConstants.CENTER);
+    gbc.anchor = GridBagConstraints.WEST; // Местиоположение внутри ячейки. GridBagConstraints.CENTER
+    gbc.fill = GridBagConstraints.BOTH; // Изменение размеров элемента. GridBagConstraints.NONE GridBagConstraints.HORIZONTAL
+    gbc.gridwidth = 3; // Ширина элемента в ячейках.
+    gbc.gridheight = 1; // Высота элемента в ячейках.
+    gbc.gridx = 2; // Положение в сетке по оси Х
+    gbc.gridy = 0; // Положение в сетке по оси Y
+    gbc.weightx = 0.1; // Горизонтальное промежутки до краев контейнера по Х
+    gbc.weighty = 0.1; // Горизонтальное промежутки до краев контейнера по Y
+    gbc.ipadx = 0; // Дополнительные промежутки до краев ячейки по Х
+    gbc.ipady = 0; // Дополнительные промежутки до краев ячейки по Y
+	//jlab.setBackground(Color.black);
+	jlab.setFont(new Font("Arial", Font.PLAIN, 64));
+    jfrm.add(jlab, gbc);
+
+    jlaba = new JLabel("Среднее время, мс - "); 
+    jlaba.setHorizontalTextPosition(JLabel.RIGHT);
+    gbc.anchor = GridBagConstraints.CENTER; // Местиоположение внутри ячейки. GridBagConstraints.CENTER
+    gbc.fill = GridBagConstraints.BOTH; // Изменение размеров элемента. GridBagConstraints.NONE GridBagConstraints.HORIZONTAL
+    gbc.gridwidth = 2; // Ширина элемента в ячейках.
+    gbc.gridheight = 1; // Высота элемента в ячейках.
+    gbc.gridx = 0; // Положение в сетке по оси Х
+    gbc.gridy = 1; // Положение в сетке по оси Y
+    gbc.weightx = 0.1; // Горизонтальное промежутки до краев контейнера по Х
+    gbc.weighty = 0.1; // Горизонтальное промежутки до краев контейнера по Y
+    gbc.ipadx = 0; // Дополнительные промежутки до краев ячейки по Х
+    gbc.ipady = 0; // Дополнительные промежутки до краев ячейки по Y
+    jfrm.add(jlaba, gbc);
+
+    jlabb = new JLabel("Среднее время мс - "); 
+    jlabb.setHorizontalTextPosition(JLabel.LEFT);
+    gbc.anchor = GridBagConstraints.SOUTH; // Местиоположение внутри ячейки. GridBagConstraints.CENTER
+    gbc.fill = GridBagConstraints.BOTH; // Изменение размеров элемента. GridBagConstraints.NONE GridBagConstraints.HORIZONTAL
+    gbc.gridwidth = 2; // Ширина элемента в ячейках.
+    gbc.gridheight = 1; // Высота элемента в ячейках.
+    gbc.gridx = 5; // Положение в сетке по оси Х
+    gbc.gridy = 1; // Положение в сетке по оси Y
+    gbc.weightx = 0.1; // Горизонтальное промежутки до краев контейнера по Х
+    gbc.weighty = 0.1; // Горизонтальное промежутки до краев контейнера по Y
+    gbc.ipadx = 0; // Дополнительные промежутки до краев ячейки по Х
+    gbc.ipady = 0; // Дополнительные промежутки до краев ячейки по Y
+    jfrm.add(jlabb, gbc);
+
+
+    JButton JButtonStart = new JButton("START"); 
+    gbc.anchor = GridBagConstraints.SOUTH; // Местиоположение внутри ячейки. GridBagConstraints.CENTER
+    gbc.fill = GridBagConstraints.BOTH; // Изменение размеров элемента. GridBagConstraints.NONE GridBagConstraints.HORIZONTAL
+    gbc.gridwidth = 2; // Ширина элемента в ячейках.
+    gbc.gridheight = 1; // Высота элемента в ячейках.
+    gbc.gridx = 2; // Положение в сетке по оси Х
+    gbc.gridy = 1; // Положение в сетке по оси Y
+    gbc.weightx = 0.1; // Горизонтальное промежутки до краев контейнера по Х
+    gbc.weighty = 0.1; // Горизонтальное промежутки до краев контейнера по Y
+    //gbc.ipadx = 10; // Дополнительные горизонтальное промежутки до краев ячейки по Х
+    //gbc.ipady = 10; // Дополнительные горизонтальное промежутки до краев ячейки по Y
+    jlab.setForeground(Color.red);
+    JButtonStart.addActionListener(this);
+    jfrm.add(JButtonStart, gbc);  
+
+
+    JButton JButtonRed = new JButton("КРАСНЫЙ"); 
+    gbc.anchor = GridBagConstraints.SOUTH; // Местиоположение внутри ячейки. CENTER SOUTH HORIZONTAL
+    gbc.fill = GridBagConstraints.HORIZONTAL; // Изменение размеров элемента. GridBagConstraints.NONE GridBagConstraints.HORIZONTAL
+    gbc.gridwidth = 1; // Ширина элемента в ячейках.
+    gbc.gridheight = 1; // Высота элемента в ячейках.
+    gbc.gridx = 0; // Положение в сетке по оси Х
+    gbc.gridy = 2; // Положение в сетке по оси Y
+    gbc.weightx = 0.1; // Горизонтальное промежутки до краев контейнера по Х
+    gbc.weighty = 0.1; // Горизонтальное промежутки до краев контейнера по Y
+    //gbc.ipadx = 10; // Дополнительные горизонтальное промежутки до краев ячейки по Х
+    //gbc.ipady = 10; // Дополнительные горизонтальное промежутки до краев ячейки по Y
+    //JButtonRed.setForeground(Color.red);
+    JButtonRed.addActionListener(this);
+    jfrm.add(JButtonRed, gbc);  
+
+    JButton JButtonOrange = new JButton("ОРАНЖЕВЫЙ");
+    gbc.anchor = GridBagConstraints.SOUTH; // Местиоположение внутри ячейки. GridBagConstraints.CENTER
+    gbc.fill = GridBagConstraints.HORIZONTAL; // Изменение размеров элемента. GridBagConstraints.NONE
+    gbc.gridwidth = 1; // Ширина элемента в ячейках.
+    gbc.gridheight = 1; // Высота элемента в ячейках.
+    gbc.gridx = 1; // Положение в сетке по оси Х
+    gbc.gridy = 2; // Положение в сетке по оси Y
+    gbc.weightx = 0.1; // Горизонтальное промежутки до краев контейнера по Х
+    gbc.weighty = 0.1; // Горизонтальное промежутки до краев контейнера по Y
+    //JButtonOrange.setForeground(Color.orange);
+    JButtonOrange.addActionListener(this);
+    jfrm.add(JButtonOrange, gbc);
+
+    JButton JButtonYellow = new JButton("ЖЕЛТЫЙ");
+    gbc.anchor = GridBagConstraints.SOUTH; // Местиоположение внутри ячейки. GridBagConstraints.CENTER
+    gbc.fill = GridBagConstraints.HORIZONTAL; // Изменение размеров элемента. GridBagConstraints.NONE
+    gbc.gridwidth = 1; // Ширина элемента в ячейках.
+    gbc.gridheight = 1; // Высота элемента в ячейках.
+    gbc.gridx = 2; // Положение в сетке по оси Х
+    gbc.gridy = 2; // Положение в сетке по оси Y
+    gbc.weightx = 0.1; // Горизонтальное промежутки до краев контейнера по Х
+    gbc.weighty = 0.1; // Горизонтальное промежутки до краев контейнера по Y
+    //JButtonYellow.setForeground(Color.yellow);
+    JButtonYellow.addActionListener(this);
+    jfrm.add(JButtonYellow, gbc);
+
+    JButton JButtonGreen = new JButton("ЗЕЛЕНЫЙ");
+    gbc.anchor = GridBagConstraints.SOUTH; // Местиоположение внутри ячейки. GridBagConstraints.CENTER
+    gbc.fill = GridBagConstraints.HORIZONTAL; // Изменение размеров элемента. GridBagConstraints.NONE
+    gbc.gridwidth = 1; // Ширина элемента в ячейках.
+    gbc.gridheight = 1; // Высота элемента в ячейках.
+    gbc.gridx = 3; // Положение в сетке по оси Х
+    gbc.gridy = 2; // Положение в сетке по оси Y
+    gbc.weightx = 0.1; // Горизонтальное промежутки до краев контейнера по Х
+    gbc.weighty = 0.1; // Горизонтальное промежутки до краев контейнера по Y
+    //JButtonGreen.setForeground(Color.green);
+    JButtonGreen.addActionListener(this);
+    jfrm.add(JButtonGreen, gbc);
+
+    JButton JButtonBlue = new JButton("СИНИЙ");
+    gbc.anchor = GridBagConstraints.SOUTH; // Местиоположение внутри ячейки. GridBagConstraints.CENTER
+    gbc.fill = GridBagConstraints.HORIZONTAL; // Изменение размеров элемента. GridBagConstraints.NONE
+    gbc.gridwidth = 1; // Ширина элемента в ячейках.
+    gbc.gridheight = 1; // Высота элемента в ячейках.
+    gbc.gridx = 4; // Положение в сетке по оси Х
+    gbc.gridy = 2; // Положение в сетке по оси Y
+    gbc.weightx = 0.1; // Горизонтальное промежутки до краев контейнера по Х
+    gbc.weighty = 0.1; // Горизонтальное промежутки до краев контейнера по Y
+    //JButtonBlue.setForeground(Color.blue);
+    JButtonBlue.addActionListener(this);
+    jfrm.add(JButtonBlue, gbc);
+
+    JButton JButtonCyan = new JButton("ГОЛУБОЙ");
+    gbc.anchor = GridBagConstraints.SOUTH; // Местиоположение внутри ячейки. GridBagConstraints.CENTER
+    gbc.fill = GridBagConstraints.HORIZONTAL; // Изменение размеров элемента. GridBagConstraints.NONE
+    gbc.gridwidth = 1; // Ширина элемента в ячейках.
+    gbc.gridheight = 1; // Высота элемента в ячейках.
+    gbc.gridx = 5; // Положение в сетке по оси Х
+    gbc.gridy = 2; // Положение в сетке по оси Y
+    gbc.weightx = 0.1; // Горизонтальное промежутки до краев контейнера по Х
+    gbc.weighty = 0.1; // Горизонтальное промежутки до краев контейнера по Y
+    //JButtonCyan.setForeground(Color.cyan);
+    JButtonCyan.addActionListener(this);
+    jfrm.add(JButtonCyan, gbc);
+
+    // Give the frame an initial size. 
+    jfrm.setSize(800, 300); 
+ 
+    // Terminate the program when the user closes the application. 
+    jfrm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+ 
+    // Add the label to the content pane. 
+    //jfrm.add(jlab);
+	AT1 = new AverageTime();
+	AT2 = new AverageTime();
+    // Display the frame. 
+    jfrm.setVisible(true); 
+  } 
+ 
+  public static void main(String args[]) { 
+    // Create the frame on the event dispatching thread. 
+    SwingUtilities.invokeLater(new Runnable() { 
+      public void run() { 
+        new BraineGame(); 
+      } 
+    }); 
+  }
+
+  public void actionPerformed(ActionEvent ae) { 
+    String a = "";
+    a = ae.getActionCommand();
+	 
+		if (a.equals("START")) {
+		   // Starting timing. 
+			beginT = System.nanoTime();
+			rnd = r.nextInt(6);
+			rnb = r.nextBoolean();
+			if (!rnb) { rnc = r.nextInt(6);} else {rnc = rnd;}
+				switch (rnd) {
+					case 0:
+						if (rnb) {jlab.setForeground(Color.red);}
+						jlab.setText("КРАСНЫЙ");
+						break;
+					case 1:
+						if (rnb) {jlab.setForeground(Color.orange);}
+						jlab.setText("ОРАНЖЕВЫЙ");
+						break;
+					case 2:
+						if (rnb) {jlab.setForeground(Color.yellow);}
+						jlab.setText("ЖЕЛТЫЙ");
+						break;
+					case 3:
+						if (rnb) {jlab.setForeground(Color.green);}
+						jlab.setText("ЗЕЛЕНЫЙ");
+						break;
+					case 4:
+						if (rnb) {jlab.setForeground(Color.blue);}
+						jlab.setText("СИНИЙ");
+						break;
+					case 5:
+						if (rnb) {jlab.setForeground(Color.cyan);}
+						jlab.setText("ГОЛУБОЙ");
+						break;
+					default:
+					jlab.setForeground(Color.gray);		
+				} // switch (rnd)
+						if (!rnb) { 
+							switch (rnc) {
+							case 0:
+								jlab.setForeground(Color.red);
+								//jlab.setText("КРАСНЫЙ");
+								break;
+							case 1:
+								jlab.setForeground(Color.orange);
+								//jlab.setText("ОРАНЖЕВЫЙ");
+								break;
+							case 2:
+								jlab.setForeground(Color.yellow);
+								//jlab.setText("ЖЕЛТЫЙ");
+								break;
+							case 3:
+								jlab.setForeground(Color.green);
+								//jlab.setText("ЗЕЛЕНЫЙ");
+								break;
+							case 4:
+								jlab.setForeground(Color.blue);
+								//jlab.setText("СИНИЙ");
+								break;
+							case 5:
+								jlab.setForeground(Color.cyan);
+								//jlab.setText("ГОЛУБОЙ");
+								break;
+							default:
+								jlab.setForeground(Color.gray);		
+							} // switch (rnc)
+						}				
+			//jlabb.setText("Random: " + Integer.toString(rnd) + " Color: " + Integer.toString(rnc) + "Bool: " + Boolean.toString(rnb));
+		} else {
+			endT = System.nanoTime();// End timing. 
+			switch (rnc) {
+				case 0:
+					if (a.equals("КРАСНЫЙ")) {SetLabel();}
+					break;
+				case 1:
+					if (a.equals("ОРАНЖЕВЫЙ")) {SetLabel();}
+					break;
+				case 2:
+					if (a.equals("ЖЕЛТЫЙ")) {SetLabel();}
+					break;
+				case 3:
+					if (a.equals("ЗЕЛЕНЫЙ")) {SetLabel();}
+					break;
+				case 4:
+					if (a.equals("СИНИЙ")) {SetLabel();}
+					break;
+				case 5:
+					if (a.equals("ГОЛУБОЙ")) {SetLabel();}
+					break;
+				default:
+					jlaba.setText("You selected " + ae.getActionCommand());
+					//jlabb.setText("ELSE - Random: " + Integer.toString(rnd) + " Color: " + Integer.toString(rnc) + "Bool: " + Boolean.toString(rnb));
+			}	 // switch (rnd)
+		} // else if (a.equals("START")) 
+   } // actionPerformed
+   
+   private void SetLabel() {
+   					if (rnb) {
+					AT1.Add((endT - beginT)/1000000);
+					jlaba.setText("Слово: " + Long.toString(AT1.calculateAverage()) + " ms");
+					} else {
+					AT2.Add((endT - beginT)/1000000);
+					jlabb.setText("Цвет: " + Long.toString(AT2.calculateAverage()) + " ms");
+					}
+   }
+   
+} // BraineGame
